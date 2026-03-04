@@ -94,10 +94,42 @@ p, li, span, label, div {color: #CBD5E1;}
 }
 
 /* ── Sidebar branding ── */
-.brand-header {text-align:center; padding: 20px 0 28px 0; border-bottom: 1px solid #334155; margin-bottom: 16px;}
+.brand-header {text-align:center; padding: 20px 0 24px 0; border-bottom: 1px solid #334155; margin-bottom: 18px;}
 .brand-name   {font-size:1.45rem; font-weight:800; color:#F1F5F9 !important;}
 .brand-tag    {font-size:0.72rem; color:#64748B !important; letter-spacing:1.5px; text-transform:uppercase;}
-.nav-badge    {background:#1E3A8A; color:#BFDBFE !important; font-size:0.68rem; padding:2px 8px; border-radius:4px; margin-left:6px;}
+
+/* ── Sidebar Navigation ── */
+.nav-section-title {
+    font-size: 0.65rem; color: #475569 !important; letter-spacing: 2px;
+    text-transform: uppercase; font-weight: 700;
+    margin: 0 0 10px 4px; padding: 0;
+}
+.nav-container { margin: 0 0 20px 0; }
+.nav-item {
+    display: flex !important; align-items: center !important; gap: 10px;
+    padding: 9px 12px; border-radius: 8px;
+    text-decoration: none !important;
+    color: #94A3B8 !important; font-size: 0.88rem; font-weight: 500;
+    margin-bottom: 3px; transition: all 0.18s ease;
+    border: 1px solid transparent; cursor: pointer;
+}
+.nav-item:hover {
+    background: #1E293B !important; color: #E2E8F0 !important;
+    border-color: #334155 !important; text-decoration: none !important;
+}
+.nav-item-active {
+    background: linear-gradient(135deg,#1E3A8A,#1D4ED8) !important;
+    color: #BFDBFE !important; border-color: #2563EB !important;
+    box-shadow: 0 2px 14px rgba(37,99,235,0.35); font-weight: 600 !important;
+}
+.nav-item-active:hover { color: #BFDBFE !important; }
+.nav-icon { font-size: 1.05rem; flex-shrink: 0; }
+.nav-text  { flex: 1; }
+.nav-pip   {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #3B82F6; flex-shrink: 0;
+    box-shadow: 0 0 6px #3B82F6;
+}
 
 /* ── Divider ── */
 .fancy-divider {border:none; border-top:1px solid #1E293B; margin: 20px 0;}
@@ -1044,22 +1076,34 @@ def sidebar():
         </div>
         """, unsafe_allow_html=True)
 
-        st.markdown("**NAVIGASI**")
-        pages = {
-            "🏠 Beranda & Ikhtisar":          "home",
-            "📊 EDA & Wawasan":               "eda",
-            "🤖 Performa Model":              "model",
-            "🎯 Prediksi Churn":             "predict",
-            "💰 Dampak Bisnis":              "impact",
-        }
-        selection = st.radio(
-            "", list(pages.keys()),
-            label_visibility="collapsed",
-            index=0,
-        )
+        # ── Navigation ──
+        current_page = st.query_params.get("page", "home")
 
-        st.markdown("<br>", unsafe_allow_html=True)
-        st.markdown("**INFO MODEL**")
+        pages = [
+            ("🏠", "Beranda & Ikhtisar", "home"),
+            ("📊", "EDA & Wawasan",      "eda"),
+            ("🤖", "Performa Model",     "model"),
+            ("🎯", "Prediksi Churn",     "predict"),
+            ("💰", "Dampak Bisnis",      "impact"),
+        ]
+
+        st.markdown('<p class="nav-section-title">Navigasi</p>', unsafe_allow_html=True)
+
+        nav_html = '<div class="nav-container">'
+        for icon, label, key in pages:
+            active = "nav-item-active" if current_page == key else ""
+            pip = '<span class="nav-pip"></span>' if current_page == key else ''
+            nav_html += (
+                f'<a href="?page={key}" class="nav-item {active}" target="_self">'
+                f'<span class="nav-icon">{icon}</span>'
+                f'<span class="nav-text">{label}</span>'
+                f'{pip}</a>'
+            )
+        nav_html += '</div>'
+        st.markdown(nav_html, unsafe_allow_html=True)
+
+        st.markdown('<hr style="border:none;border-top:1px solid #1E293B;margin:4px 0 16px 0">', unsafe_allow_html=True)
+        st.markdown('<p class="nav-section-title">Info Model</p>', unsafe_allow_html=True)
         st.markdown(f"""
         <div style="background:#0F172A;border-radius:8px;padding:12px 14px;
                     border:1px solid #1E293B;font-size:0.78rem;color:#64748B;">
@@ -1079,9 +1123,7 @@ def sidebar():
         </div>
         """, unsafe_allow_html=True)
 
-        st.markdown("<br>", unsafe_allow_html=True)
-
-        return pages[selection]
+        return current_page
 
 
 # ─────────────────────────────────────────────────────────────────────────────
