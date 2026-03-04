@@ -102,56 +102,78 @@ p, li, span, label, div {color: #CBD5E1;}
 .nav-section-title {
     font-size: 0.65rem; color: #475569 !important; letter-spacing: 2px;
     text-transform: uppercase; font-weight: 700;
-    margin: 0 0 6px 4px; padding: 0;
+    margin: 0 0 8px 4px; padding: 0;
 }
 /* Remove gap between radio options */
 [data-testid="stSidebar"] div[role="radiogroup"] {
     gap: 0 !important;
 }
-/* Style each radio label as nav item */
+/* Style each radio label wrapper */
+[data-testid="stSidebar"] div[role="radiogroup"] label {
+    width: 100% !important;
+    border-radius: 10px !important;
+    margin-bottom: 3px !important;
+    transition: background 0.18s, border-color 0.18s, box-shadow 0.18s !important;
+}
+/* Style the baseweb radio container */
 [data-testid="stSidebar"] div[role="radiogroup"] [data-baseweb="radio"] {
     display: flex !important;
     align-items: center !important;
-    padding: 9px 12px !important;
-    border-radius: 8px !important;
+    padding: 10px 14px !important;
+    border-radius: 10px !important;
     border: 1px solid transparent !important;
-    margin: 2px 0 !important;
     cursor: pointer !important;
-    transition: background 0.15s, border-color 0.15s !important;
+    transition: background 0.18s, border-color 0.18s, box-shadow 0.18s !important;
     background: transparent !important;
+    width: 100% !important;
 }
 /* Hide the radio circle */
 [data-testid="stSidebar"] div[role="radiogroup"] [data-baseweb="radio"] > div:first-child {
     display: none !important;
 }
-/* Style the text */
+/* Style the text — default (inactive) */
 [data-testid="stSidebar"] div[role="radiogroup"] [data-baseweb="radio"] > div:last-child {
-    color: #94A3B8 !important;
-    font-size: 0.88rem !important;
+    color: #64748B !important;
+    font-size: 0.9rem !important;
     font-weight: 500 !important;
     padding: 0 !important;
+    letter-spacing: 0.01em !important;
+    transition: color 0.18s !important;
 }
-/* Hover */
+/* ── Hover ── */
 [data-testid="stSidebar"] div[role="radiogroup"] label:hover [data-baseweb="radio"] {
-    background: #1E293B !important;
-    border-color: #334155 !important;
+    background: rgba(59,130,246,0.12) !important;
+    border-color: rgba(59,130,246,0.35) !important;
+    box-shadow: 0 0 0 0 transparent !important;
 }
 [data-testid="stSidebar"] div[role="radiogroup"] label:hover [data-baseweb="radio"] > div:last-child {
-    color: #E2E8F0 !important;
-}
-/* Active / checked */
-[data-testid="stSidebar"] div[role="radiogroup"] input:checked + div [data-baseweb="radio"] {
-    background: linear-gradient(135deg,#1E3A8A,#1D4ED8) !important;
-    border-color: #2563EB !important;
-    box-shadow: 0 2px 14px rgba(37,99,235,0.35) !important;
-}
-[data-testid="stSidebar"] div[role="radiogroup"] input:checked + div [data-baseweb="radio"] > div:last-child {
-    color: #BFDBFE !important;
+    color: #93C5FD !important;
     font-weight: 600 !important;
+}
+/* ── Active / checked — uses :has() for reliable detection ── */
+[data-testid="stSidebar"] div[role="radiogroup"] [data-baseweb="radio"]:has(input[type="radio"]:checked) {
+    background: linear-gradient(135deg, #1D4ED8 0%, #2563EB 100%) !important;
+    border-color: #60A5FA !important;
+    box-shadow: 0 4px 20px rgba(37,99,235,0.55), inset 0 1px 0 rgba(255,255,255,0.1) !important;
+    border-left: 3px solid #93C5FD !important;
+}
+[data-testid="stSidebar"] div[role="radiogroup"] [data-baseweb="radio"]:has(input[type="radio"]:checked) > div:last-child {
+    color: #FFFFFF !important;
+    font-weight: 700 !important;
+    font-size: 0.92rem !important;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.3) !important;
 }
 /* Remove focus ring */
 [data-testid="stSidebar"] div[role="radiogroup"] [data-baseweb="radio"]:focus-within {
-    outline: none !important; box-shadow: none !important;
+    outline: none !important;
+}
+/* Fallback — input:checked sibling approach */
+[data-testid="stSidebar"] div[role="radiogroup"] input[type="radio"]:checked ~ div,
+[data-testid="stSidebar"] div[role="radiogroup"] label:has(input:checked) [data-baseweb="radio"] {
+    background: linear-gradient(135deg, #1D4ED8 0%, #2563EB 100%) !important;
+    border-color: #60A5FA !important;
+    border-left: 3px solid #93C5FD !important;
+    box-shadow: 0 4px 20px rgba(37,99,235,0.55) !important;
 }
 
 /* ── Divider ── */
